@@ -1,0 +1,28 @@
+
+.centered_text {
+    text-align: center;
+}
+
+.header {
+    padding-top: 50px;
+}
+
+.link_button {
+    padding-bottom: 20px;
+}
+
+h2.title {
+    font-weight: 900;
+}
+
+p.normal {
+  font-weight: normal;
+}
+
+p.thick {
+  font-weight: bold;
+}
+
+p.thicker {
+  font-weight: 900;
+}

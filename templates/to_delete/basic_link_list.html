@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+
+
+  <!-- Basic Page Needs x
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>{{title}}</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;400;700;900&display=swap" rel="stylesheet">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<!--  <link rel="stylesheet" href="css/normalize.css">-->
+<!--  <link rel="stylesheet" href="css/skeleton.css">-->
+  <link rel="stylesheet" href=" {{ url_for('static',filename='skeleton.css') }}">
+  <link rel="stylesheet" href=" {{ url_for('static',filename='normalize.css') }}">
+  <link rel="stylesheet" href=" {{ url_for('static',filename='custom.css') }}">
+
+
+
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="images/favicon.png">
+
+</head>
+<body>
+
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div class="section hero">
+  <div class="container">
+    <div class="row centered_text header">
+      <div class="twelve columns title">
+        <h2 class="title">{{title}}</h2>
+      </div>
+      <div class="twelve columns">
+        <p>{{content}}</p>
+      </div>
+    </div>
+      {% if url_links is defined and url_links|length != 0 %}
+        {%for i in range(0, url_links|length)%}
+          <div class="row centered_text link_button">
+               <a href="{{url_links[i]}}">
+                <button>{{button_texts[i]}}</button>
+                </a>
+          </div>
+        {%endfor%} 
+    {% endif %}
+
+  </div>
+  </div>
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+</html>
