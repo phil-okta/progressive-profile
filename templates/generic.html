@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Basic Page Needs x
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta charset="utf-8" />
+    <title>{{title}}</title>
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    {% if style.font is defined %}
+    <link href="{{style.font}}" rel="stylesheet" />
+    {% else %}
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;400;700;900&display=swap"
+      rel="stylesheet"
+    />
+    {% endif %}
+
+    <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <!--  <link rel="stylesheet" href="css/normalize.css">-->
+    <!--  <link rel="stylesheet" href="css/skeleton.css">-->
+    <link
+      rel="stylesheet"
+      href=" {{ url_for('static',filename='skeleton.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href=" {{ url_for('static',filename='normalize.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href=" {{ url_for('static',filename='custom.css') }}"
+    />
+    <style id="custom-styles-container">
+      body {
+        background-image: url({{style.background_image}});
+        background-color: #cccccc; /* Used if the image is unavailable */
+        height: 500px; /* You must set a specified height */
+        background-position: center; /* Center the image */
+        background-repeat: no-repeat; /* Do not repeat the image */
+        background-size: cover; /* Resize the background image to cover the entire container */
+      }
+      body {
+        align-items: center;
+        background-color: #eee;
+        font-family: {{style.font_family|safe}};
+        display: flex;
+        justify-content: center;
+        height: 100vh;
+      }
+
+      .form {
+        background-color: #fff;
+        border-radius: 20px;
+        box-sizing: border-box;
+        min-height: 300px;
+        padding: 20px;
+        width: 620px;
+      }
+
+      .title {
+        color: #000;
+        font-family: {{style.font_family|safe}};
+        font-size: 36px;
+        font-weight: 600;
+        margin-top: 30px;
+      }
+
+      .subtitle {
+        color: #000;
+        font-family: {{style.font_family|safe}};
+        font-size: 16px;
+        font-weight: 600;
+        margin-top: 10px;
+      }
+
+      .input-container {
+        height: 50px;
+        position: relative;
+        width: 100%;
+      }
+
+      .ic1 {
+        margin-top: 40px;
+      }
+
+      .ic2 {
+        margin-top: 30px;
+      }
+
+      .input {
+        background-color: #303245;
+        border-radius: 12px;
+        border: 0;
+        box-sizing: border-box;
+        color: #eee;
+        font-size: 18px;
+        font-family: {{style.font_family|safe}};
+        height: 100%;
+        outline: 0;
+        padding: 4px 20px 0;
+        width: 100%;
+      }
+
+      .cut {
+        background-color: #15172b;
+        border-radius: 10px;
+        height: 20px;
+        left: 20px;
+        position: absolute;
+        top: -20px;
+        transform: translateY(0);
+        transition: transform 200ms;
+        width: 76px;
+      }
+
+      .cut-short {
+        width: 50px;
+      }
+
+      .input:focus ~ .cut,
+      .input:not(:placeholder-shown) ~ .cut {
+        transform: translateY(8px);
+      }
+
+      .placeholder {
+        color: #65657b;
+        font-family: {{style.font_family|safe}};
+        left: 20px;
+        line-height: 14px;
+        pointer-events: none;
+        position: absolute;
+        transform-origin: 0 50%;
+        transition: transform 200ms, color 200ms;
+        top: 20px;
+      }
+
+      .input:focus ~ .placeholder,
+      .input:not(:placeholder-shown) ~ .placeholder {
+        transform: translateY(-30px) translateX(10px) scale(0.75);
+      }
+
+      .input:not(:placeholder-shown) ~ .placeholder {
+        color: #808097;
+      }
+
+      .input:focus ~ .placeholder {
+        color: #dc2f55;
+      }
+
+      .submit_button {
+        background-color: #0088dd;
+        border-radius: 12px;
+        border: 0;
+        box-sizing: border-box; 
+        color: #eee;
+        cursor: pointer;
+        font-family: {{style.font_family|safe}};
+        font-size: 18px;
+        height: 50px;
+        margin-top: 38px;
+        // outline: 0;
+        text-align: center;
+        width: 100%;
+      }
+
+      .submit_button:active {
+        background-color: #{{button_colour}};
+      }
+    </style>
+
+    <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="icon" type="image/png" href="images/favicon.png" />
+  </head>
+  <body>
+    <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <div class="main">
+      <div class="section hero">
+        <div class="container">
+          <div class="row form">
+            <div class="title">{{title}}</div>
+            <div class="subtitle">
+              <p>{{details}}</p>
+            </div>
+            <form action="{{action_route}}" method="POST">
+              {% if content is defined and content|length != 0 %} {%for i in
+              range(0, content|length)%} {% if content[i].response_type ==
+              "checkbox"%}
+              <label class="check_box">
+                <input type="checkbox" name="{{content[i].metadata_key}}" />
+                <span class="label-body">{{content[i].text}}</span>
+              </label>
+              {% elif content[i].response_type == "dropdown" %}
+              <label for="{{content[i].text}}"
+                >{{content[i].text}}</label
+              >
+              <select class="u-full-width" name="{{content[i].metadata_key}}">
+                {%for key,value in content[i].options.items()%}
+                <option value="{{key}}">{{value}}</option>
+                {%endfor%}
+              </select>
+              {% else %}
+              <label for="formInput">{{content[i].text}}</label>
+              <input
+                class="u-full-width"
+                type="{{content[i].response_type}}"
+                placeholder=""
+                id="{{content[i].metadata_key}}"
+                name="{{content[i].metadata_key}}"
+              />
+              {% endif %} {%endfor%} {% endif %}
+              <input
+                class="u-full-width submit_button"
+                type="submit"
+                value="Submit"
+              />
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  </body>
+</html>
