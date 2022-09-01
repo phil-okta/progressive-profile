@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <meta name="robots" content="noindex, nofollow" />
+
+    <link rel="stylesheet" href="https://cdn.auth0.com/ulp/react-components/1.59.36/css/main.cdn.min.css">
+    <link rel="stylesheet" href="https://res.cloudinary.com/finnhvman/raw/upload/matter/matter-0.2.2.min.css">
+
+    <!-- Default Styles -->
+    <style>
+        :root {
+            --matter-primary-rgb: {{primary_color_rgb}};
+            --prompt-width: 600px;
+        }
+    </style>
+    <style id="custom-styles-container">
+        {{custom_styles|safe}}
+    </style>
+    <style>
+        .cf18f326b.c07c7c52c.radio .input~.ca87a9115 {
+            top: -2px;
+            top: var(--input-label-top-focus);
+            transform: scale(.88) translateX(-8px) translateY(-50%);
+            transform: var(--input-label-transform-focus);
+            overflow: visible;
+            white-space: normal;
+        }
+        .cf18f326b.c07c7c52c.radio,
+        .cf18f326b.c07c7c52c.select {
+            margin-top: 32px;
+        }
+        .cf18f326b.c07c7c52c.radio > .input {
+            height: auto;
+            padding-top: 16px;
+            padding-bottom: 16px;
+        }
+        .cf18f326b.c07c7c52c.radio > .input > div {
+            padding-top: 4px;
+            padding-bottom: 4px;
+        }
+        .cf18f326b.c07c7c52c.select select,
+        .cf18f326b.c07c7c52c.date input {
+            cursor: pointer;
+        }
+        .cf18f326b.c07c7c52c.date .input~.ca87a9115 {
+            width: 25%;
+        }
+        .cf18f326b.c07c7c52c.date .input.focus~.ca87a9115,
+        .cf18f326b.c07c7c52c.date .input:focus~.ca87a9115,
+        .cf18f326b.c07c7c52c.date.cd3c6ae99 .input~.ca87a9115 {
+            width: auto;
+        }
+    </style>
+    <style>
+      /* By default, hide features for javascript-disabled browsing */
+      /* We use !important to override any css with higher specificity */
+      /* It is also overriden by the styles in <noscript> in the header file */
+      .no-js {
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        height: 1px;
+        overflow: hidden;
+        position: absolute;
+        white-space: nowrap;
+        width: 1px;
+      }
+    </style>
+    <noscript>
+      <style>
+        /* We use !important to override the default for js enabled */
+        /* If the display should be other than block, it should be defined specifically here */
+        .js-required { display: none !important; }
+        .no-js {
+          clip: auto;
+          clip-path: none;
+          height: auto;
+          overflow: auto;
+          position: static;
+          white-space: normal;
+          width: var(--prompt-width);
+        }
+      </style>
+    </noscript>
+    
+    <title>{{title}}</title>
+</head>
+
+<body>
+    <div class="c59888187 c548acd2d page-container">
+        <main class="c19347ce0 login">
+            <section class="cc7139482 _prompt-box-outer ca10830f9">
+                <div class="cd3bdafb9 cba15cc0c">
+                    <div class="c2118f57a">
+                        <header class="cebe27292 c80a23c4a">
+                            <div title="{{heading}}" id="custom-prompt-logo"
+                                style="width: auto !important; height: 60px !important; position: static !important; margin: auto !important; padding: 0 !important; background-color: transparent !important; background-position: center !important; background-size: contain !important; background-repeat: no-repeat !important">
+                            </div>
+                              {{logo_element|safe}}
+<!--                             <img class="c19a89e59 c06fc3af3 logo-container" id="prompt-logo-center"
+                                src="{{logo_src}}"
+                                alt="{{heading}}"> -->
+
+                            <h1 class="c3a499dcb c9e18f68d">{{heading}}</h1>
+
+                            <div class="ccf077101 c8e6b8cc4 lead-container">
+                                {{lead|safe}}
+                            </div>
+                            <div class="ccf077101 c8e6b8cc4 lead-container">
+                                {{signin_url|safe}}
+                            </div>
+                        </header>
+
+                        <div class="c36ff83cc cdc404a57 form-container">
+
+                            <form action="{{action_route}}" method="POST" class="c586d00f6 cf5b16c7f">
+                                <input type="hidden" name="state"
+                                    value="{{state}}">
+
+                                <div class="c9abce904 c59df29f6">
+                                    <div class="c21c88696">
+
+                                        {% for input in inputs -%}
+                                            {% if input.type == "text" %}
+                                            <div class="input-wrapper _input-wrapper">
+                                                <div class="cf18f326b c9703a851 text c24850783 c07c7c52c"
+                                                    data-action-text="" data-alternate-action-text="">
+                                                    <label class="ca87a9115 input-label no-js cb7527a39 c6834213f" for="{{input.metadata_key}}">
+                                                        {{input.label}}
+                                                    </label>
+
+                                                    <input class="input ce3d41e26 c5f1130a2" inputmode="{{input.mode}}"
+                                                        name="{{input.metadata_key}}" id="{{input.metadata_key}}" type="text" value="{{input.current}}" {% if input.required %}required=""{% endif %}
+                                                        autocomplete="{{input.metadata_key}}" autocapitalize="none" spellcheck="false"
+                                                        autofocus="">
+    
+                                                    <div class="ca87a9115 input-label js-required cb7527a39 c6834213f"
+                                                        data-dynamic-label-for="{{input.metadata_key}}" aria-hidden="true">
+                                                        {{input.label}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% elif input.type == "date" %}
+                                            <div class="input-wrapper _input-wrapper">
+                                                <div class="cf18f326b c9703a851 date c24850783 c07c7c52c"
+                                                    data-action-text="" data-alternate-action-text="">
+                                                    <label class="ca87a9115 input-label no-js cb7527a39 c6834213f" for="{{input.metadata_key}}">
+                                                        {{input.label}}
+                                                    </label>
+
+                                                    <input class="input ce3d41e26 c5f1130a2" inputmode="{{input.mode}}"
+                                                        name="{{input.metadata_key}}" id="{{input.metadata_key}}" type="date" value="{{input.current}}" {% if input.required %}required=""{% endif %}
+                                                        autocomplete="{{input.metadata_key}}" autocapitalize="none" spellcheck="false"
+                                                        autofocus="">
+    
+                                                    <div class="ca87a9115 input-label js-required cb7527a39 c6834213f"
+                                                        data-dynamic-label-for="{{input.metadata_key}}" aria-hidden="true">
+                                                        {{input.label}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% elif input.type == "checkbox" %}
+                                            <div class="input-wrapper _input-wrapper">
+                                                <div>
+                                                    <label class="matter-checkbox">
+                                                        {% if input.value == input.current %}
+                                                        <input type="checkbox" role="checkbox" value="{{input.value}}" name="{{input.metadata_key}}" checked="">
+                                                        {% else %}
+                                                        <input type="checkbox" role="checkbox" value="{{input.value}}" name="{{input.metadata_key}}" checked="">
+                                                        {% endif %}
+                                                        <span>
+                                                            {{input.label|safe}}
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            {% elif input.type == "switch" %}
+                                            <div class="input-wrapper _input-wrapper">
+                                                <div>
+                                                    <label class="matter-switch">
+                                                        {% if input.value == input.current %}
+                                                        <input type="checkbox" role="switch" value="{{input.value}}" name="{{input.metadata_key}}" checked="">
+                                                        {% else %}
+                                                        <input type="checkbox" role="switch" value="{{input.value}}" name="{{input.metadata_key}}" checked="">
+                                                        {% endif %}
+                                                        <span>
+                                                            <p>
+                                                                {{input.label}}
+                                                            </p>
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            {% elif input.type == "radio" %}
+                                            <div class="input-wrapper _input-wrapper">
+                                                <div class="cf18f326b c9703a851 radio c24850783 c07c7c52c" data-action-text="" data-alternate-action-text="">
+                                                    <label class="ca87a9115 input-label no-js cb7527a39 c6834213f" for="{{input.metadata_key}}">{{input.label}}</label>
+                                                    <div class="input">
+                                                        {% for opt in input.options -%}
+                                                        <div>
+                                                            {% if opt == input.current %}
+                                                            <label class="matter-radio">
+                                                                <input type="radio" role="switch" value="{{opt}}" name="{{input.metadata_key}}" checked="">
+                                                                <span>{{opt}}</span>
+                                                            </label>
+                                                            {% else %}
+                                                            <label class="matter-radio">
+                                                                <input type="radio" role="switch" value="{{opt}}" name="{{input.metadata_key}}">
+                                                                <span>{{opt}}</span>
+                                                            </label>
+                                                            {% endif %}
+                                                        </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                    <div class="ca87a9115 input-label js-required cb7527a39 c6834213f" data-dynamic-label-for="{{input.metadata_key}}" aria-hidden="true">{{input.label}}</div>
+                                                </div>
+                                            </div>
+                                            {% elif input.type == "select" %}
+                                            <div class="input-wrapper _input-wrapper">
+                                                <div class="cf18f326b c9703a851 select c24850783 c07c7c52c" data-action-text="" data-alternate-action-text="">
+                                                    <label class="ca87a9115 input-label no-js cb7527a39 c6834213f" for="{{input.metadata_key}}">{{input.label}}</label>
+                                                    
+                                                    <select value="None" name="select_test" class="input" style="background: url('data:image/svg+xml;utf-8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;24&quot; height=&quot;24&quot;><path d=&quot;M7 10l5 5 5-5z&quot;/><path d=&quot;M0 0h24v24H0z&quot; fill=&quot;none&quot;/></svg>') calc(100% - 8px) 50% no-repeat transparent;">
+                                                        {% for opt in input.options -%}
+                                                        <option value="opt">{{opt}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                    <div class="ca87a9115 input-label js-required cb7527a39 c6834213f" data-dynamic-label-for="{{input.metadata_key}}" aria-hidden="true">{{input.label}}</div>
+												                        </div>
+                                            </div>
+                                            {% elif input.html %}
+                                            <div class="input-wrapper _input-wrapper">
+                                                {{input.html|safe}}
+                                            </div>
+                                            {% endif %}
+                                        {% endfor %}
+
+                                    </div>
+                                </div>
+
+                                <div class="ccf13ae34">
+                                    <button type="submit" name="action" value="default"
+                                        class="ca0d25346 btn ce4c446b5 cd4d549f1 c4122face c5018bc4a">{{button_text}}</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+
+        <script id="client-scripts" type="text/javascript">
+            !function(){var t,e,v,h,r,n={exports:function(r,n){var a={};function i(t,e,r,n){return t.addEventListener(e,r,n)}function o(t){return"string"==typeof t}function c(t,e){return t.getAttribute(e)}function s(t,e,r){return t.setAttribute(e,r)}return{addClass:function(t,e){if(t.classList)return t.classList.add(e);var r=t.className.split(" ");-1===r.indexOf(e)&&(r.push(e),t.className=r.join(" "))},toggleClass:function(t,e){if(t.classList)return t.classList.toggle(e);var r=t.className.split(" "),n=r.indexOf(e);-1!==n?r.splice(n,1):r.push(e),t.className=r.join(" ")},addClickListener:function(t,e){return i(t,"click",e)},addEventListener:i,getAttribute:c,getElementById:function(t){return n.getElementById(t)},getParent:function(t){return t.parentNode},isString:o,loadScript:function(t){var e=n.createElement("script");e.src=t,e.async=!0,n.body.appendChild(e)},poll:function(t){var i=t.interval||2e3,e=t.url||r.location.href,o=t.condition||function(){return!0},c=t.onSuccess||function(){},s=t.onError||function(){};return setTimeout(function n(){var a=new XMLHttpRequest;return a.open("GET",e),a.setRequestHeader("Accept","application/json"),a.onload=function(){if(200===a.status){var t="application/json"===a.getResponseHeader("Content-Type").split(";")[0]?JSON.parse(a.responseText):a.responseText;return o(t)?c():setTimeout(n,i)}if(429!==a.status)return s({status:a.status,responseText:a.responseText});var e=1e3*Number.parseInt(a.getResponseHeader("X-RateLimit-Reset")),r=e-(new Date).getTime();return setTimeout(n,i<r?r:i)},a.send()},i)},querySelector:function(t,e){return o(t)?n.querySelector(t):t.querySelector(e)},querySelectorAll:function(t,e){var r=o(t)?n.querySelectorAll(t):t.querySelectorAll(e);return Array.prototype.slice.call(r)},removeClass:function(t,e){if(t.classList)return t.classList.remove(e);var r=t.className.split(" "),n=r.indexOf(e);-1!==n&&(r.splice(n,1),t.className=r.join(" "))},setAttribute:s,removeAttribute:function(t,e){return t.removeAttribute(e)},swapAttributes:function(t,e,r){var n=c(t,e),a=c(t,r);s(t,r,n),s(t,e,a)},setGlobalFlag:function(t,e){a[t]=!!e},getGlobalFlag:function(t){return!!a[t]},preventFormSubmit:function(t){t.stopPropagation(),t.preventDefault()},matchMedia:function(t){return"function"!=typeof r.matchMedia&&r.matchMedia(t).matches},dispatchEvent:function(t,e){t.dispatchEvent(e)},setTimeout:setTimeout,timeoutPromise:function(t,a){return new Promise(function(e,r){var n=setTimeout(function(){r(new Error("timeoutPromise: promise timed out"))},t);a.then(function(t){clearTimeout(n),e(t)},function(t){clearTimeout(n),r(t)})})}}}}.exports(window,document);((t={}).exports=function(n,t,o,c,s,u,l){t("div.cf18f326b.password").forEach(function(t){var a,i,e=n(t,"input"),r=n(t,'[data-action="toggle"]');o(t,(a=e,i=r,function(t){if(t.target.classList.contains("ulp-button-icon")){if(a.type="password"===a.type?"text":"password",i){var e=i.querySelector(".show-password-tooltip"),r=i.querySelector(".hide-password-tooltip");e&&u(e,"hide"),r&&u(r,"hide")}var n=l(a);"text"===a.type?c(n,"show"):s(n,"show")}}))})},t.exports)(n.querySelector,n.querySelectorAll,n.addClickListener,n.addClass,n.removeClass,n.toggleClass,n.getParent),{exports:function(t,n,a,e){var r=t(".c19347ce0"),i=t("#alert-trigger"),o=t(".c853e23ee"),c=t(".c5eebab83"),s=!1;i&&c&&r&&e(r,function(t){var e=t.target===i,r=c.contains(t.target);return e&&!s?(n(o,"show"),void(s=!0)):e&&s||s&&!r?(a(o,"show"),void(s=!1)):void 0})}}.exports(n.querySelector,n.addClass,n.removeClass,n.addClickListener),(v="recaptcha_v2",h="recaptcha_enterprise",(e={}).exports=function(t,a,i,o,c,n){var s,u=a("div[data-recaptcha-sitekey]"),e=a("div[data-recaptcha-sitekey] input"),l=a("#ulp-recaptcha");function d(){return u.getAttribute("data-recaptcha-provider")}function p(t){return e.value=t}function f(t,e){if(t&&t.getBoundingClientRect){if(!n("(max-width: 480px)"))return l.style.transform="",void(l.style.height="");(void 0===e||isNaN(e))&&(e=1.4);var r=72*e;l.style.transform="scale("+e+")",l.style.height=r+"px",l.style.width="10px",u.clientWidth+8<t.getBoundingClientRect().width&&f(t,e-.01)}}u&&(s="recaptchaCallback_"+Math.floor(1000001*Math.random()),window[s]=function(){var t,e,r,n;delete window[s],t=function(t){switch(t){case v:return window.grecaptcha;case h:return window.grecaptcha.enterprise}}(d()),e=t.render(l,{sitekey:u.getAttribute("data-recaptcha-sitekey"),"expired-callback":function(){p(""),i(u,"c09c86a73"),t.reset(e)},callback:function(t){p(t),o(u,"c09c86a73")}}),r=function(t){f(t),c(window,"resize",function(){f(t)})},n=setInterval(function(){var t=a("#ulp-recaptcha iframe");if(t)return clearInterval(n),r(t)},200)},t(function(t,e,r){switch(t){case v:return"https://www.recaptcha.net/recaptcha/api.js?hl="+e+"&onload="+r;case h:return"https://www.recaptcha.net/recaptcha/enterprise.js?render=explicit&hl="+e+"&onload="+r}}(d(),u.getAttribute("data-recaptcha-lang"),s)))},e.exports)(n.loadScript,n.querySelector,n.addClass,n.removeClass,n.addEventListener,n.matchMedia),((r={}).exports=function(n,t,a,i,o,c,s,u,r,l){function d(t){var e=t.target,r=c(e);e.value||l(e,"data-autofilled")?i(r,"cd3c6ae99"):o(r,"cd3c6ae99")}function p(t){var e=t.target;"onAutoFillStart"===t.animationName&&(r(e,"data-autofilled",!0),u(t.target,new Event("change",{bubbles:!0})),a(e,"keyup",f,{once:!0}))}function f(t){var e=t.target;r(e,"data-autofilled","")}if(n("body._simple-labels"))return t(".ca87a9115.no-js").forEach(function(t){o(t,"no-js")}),void t(".ca87a9115.js-required").forEach(function(t){i(t,"hide")});t(".cf18f326b:not(.c1168f52a):not(disabled)").forEach(function(t){i(t,"c07c7c52c");var e,r=n(t,".input");r.value&&i(t,"cd3c6ae99"),a(t,"change",d),a(r,"blur",d),a(r,"animationstart",p),e=r,s(function(){e.value&&u(e,new Event("change",{bubbles:!0}))},100)})},r.exports)(n.querySelector,n.querySelectorAll,n.addEventListener,n.addClass,n.removeClass,n.getParent,n.setTimeout,n.dispatchEvent,n.setAttribute,n.getAttribute),{exports:function(t,e,r,n,a,i){function o(t){var e=r("submitted");n("submitted",!0),e?a(t):"apple"===i(t.target,"data-provider")&&setTimeout(function(){n("submitted",!1)},2e3)}var c=t("form");c&&c.forEach(function(t){e(t,"submit",o)})}}.exports(n.querySelectorAll,n.addEventListener,n.getGlobalFlag,n.setGlobalFlag,n.preventFormSubmit,n.getAttribute)}();
+        </script>
+    </div>
+</body>
+
+</html>

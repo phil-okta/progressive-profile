@@ -1,0 +1,11 @@
+flask
+python-dotenv
+python-jose
+flask-cors
+six
+PyJwt
+requests
+cryptography
+pytz
+flask-session
+bs4

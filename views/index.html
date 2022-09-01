@@ -1,0 +1,86 @@
+<!-- This is a static file -->
+<!-- served from your routes in server.js -->
+
+<!-- You might want to try something fancier: -->
+<!-- html/nunjucks docs: http://mozilla.github.io/nunjucks/ -->
+<!-- jade: http://jade-lang.com/ -->
+<!-- haml: http://haml.info/tutorial.html -->
+<!-- hbs(handlebars): http://handlebarsjs.com/expressions.html -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Welcome to Glitch!</title>
+    <meta name="description" content="Remote Work Calculator" />
+    <link
+      id="favicon"
+      rel="icon"
+      href="https://gomix.com/favicon-app.ico"
+      type="image/x-icon"
+    />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/public/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Remote Work Calculator</h1>
+    </header>
+
+    <main>
+      <p class="bold">Enter your Data below</p>
+      <form method="post" action="/create">
+        <label for="salary">Salary</label>
+        <input
+          type="number"
+          name="salary"
+          min="1"
+          maxlength="7"
+          placeholder="50000"
+        />
+        <br />
+        <label for="hoursCommuted"
+          >Hours Commuted Daily Roundtrip (min 1, pre WFH)</label
+        >
+        <input
+          type="number"
+          name="hoursCommuted"
+          min="1"
+          max="8"
+          placeholder="1"
+        />
+        <br />
+        <label for="monComCost">Monthly Commute Cost (pre WFH)</label>
+        <input
+          type="number"
+          name="monComCost"
+          min="0"
+          maxlength="4"
+          placeholder="100"
+        />
+        <br />
+        <button type="submit">Submit</button>
+      </form>
+      <!--
+      <div class="response">
+        <p>
+          Test
+        </p>
+      </div>
+      --->
+    </main>
+
+    <footer>
+      <a href="https://glitch.com"> Remix this in Glitch,</a> and follow me on <a href="https://twitter.com/camofclay">Twitter</a>.
+    </footer>
+
+    <!-- Your web-app is https, so your scripts need to be too -->
+    <script
+      src="https://code.jquery.com/jquery-2.2.1.min.js"
+      integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="
+      crossorigin="anonymous"
+    ></script>
+    <!--<script src="/public/client.js"></script>!-->
+  </body>
+</html>
