@@ -11,17 +11,31 @@
     <link rel="stylesheet" href="https://cdn.auth0.com/ulp/react-components/1.59.36/css/main.cdn.min.css">
     <link rel="stylesheet" href="https://res.cloudinary.com/finnhvman/raw/upload/matter/matter-0.2.2.min.css">
 
+    <!-- Theme Style Variables -->
+    {% if theme["css_variables"] %}
+    <style>
+      :root {
+        {% for var in theme["css_variables"] -%}
+        --{{var.replace("_", "-")}}: {{theme["css_variables"][var]|safe}};
+        {% endfor %}
+      }
+    </style>
+    {% endif %}
     <!-- Default Styles -->
     <style>
         :root {
-            --matter-primary-rgb: {{primary_color_rgb}};
+            --page-background-color: #ffffff;
+            --matter-primary-rgb: var(--primary-color-rgb);
             --prompt-width: 600px;
         }
     </style>
     <style id="custom-styles-container">
-        {{custom_styles|safe}}
+        {{theme["custom_styles"]|safe}}
     </style>
     <style>
+        #prompt-logo-center {
+          max-height: var(--logo-height);
+        }
         .cf18f326b.c07c7c52c.radio .input~.ca87a9115 {
             top: -2px;
             top: var(--input-label-top-focus);
@@ -32,7 +46,7 @@
         }
         .cf18f326b.c07c7c52c.radio,
         .cf18f326b.c07c7c52c.select {
-            margin-top: 32px;
+            margin-top: 16px;
         }
         .cf18f326b.c07c7c52c.radio > .input {
             height: auto;
@@ -44,8 +58,13 @@
             padding-bottom: 4px;
         }
         .cf18f326b.c07c7c52c.select select,
-        .cf18f326b.c07c7c52c.date input {
+        .cf18f326b.c07c7c52c.date input,
+        .cf18f326b.c07c7c52c.color input {
             cursor: pointer;
+        }
+        .cf18f326b.c07c7c52c.color input {
+          padding: 8px;
+          height: calc(var(--input-height) + 8px);
         }
         .cf18f326b.c07c7c52c.date .input~.ca87a9115 {
             width: 25%;
@@ -54,6 +73,10 @@
         .cf18f326b.c07c7c52c.date .input:focus~.ca87a9115,
         .cf18f326b.c07c7c52c.date.cd3c6ae99 .input~.ca87a9115 {
             width: auto;
+        }
+      
+        .input-wrapper:not(:last-child) {
+          margin-bottom: 16px;
         }
     </style>
     <style>
@@ -100,11 +123,9 @@
                             <div title="{{heading}}" id="custom-prompt-logo"
                                 style="width: auto !important; height: 60px !important; position: static !important; margin: auto !important; padding: 0 !important; background-color: transparent !important; background-position: center !important; background-size: contain !important; background-repeat: no-repeat !important">
                             </div>
-                              {{logo_element|safe}}
-<!--                             <img class="c19a89e59 c06fc3af3 logo-container" id="prompt-logo-center"
-                                src="{{logo_src}}"
-                                alt="{{heading}}"> -->
-
+                            
+                            {{theme["logo_element"]|safe}}
+                            
                             <h1 class="c3a499dcb c9e18f68d">{{heading}}</h1>
 
                             <div class="ccf077101 c8e6b8cc4 lead-container">
@@ -135,8 +156,15 @@
 
                                                     <input class="input ce3d41e26 c5f1130a2" inputmode="{{input.mode}}"
                                                         name="{{input.metadata_key}}" id="{{input.metadata_key}}" type="text" value="{{input.current}}" {% if input.required %}required=""{% endif %}
-                                                        autocomplete="{{input.metadata_key}}" autocapitalize="none" spellcheck="false"
+                                                        autocomplete="{{input.metadata_key}}" autocapitalize="none" spellcheck="false" {% if input.options %}list="{{input.metadata_key}}_list"{% endif %}
                                                         autofocus="">
+                                                    {% if input.options %}
+                                                    <datalist id="{{input.metadata_key}}_list">
+                                                      {% for opt in input.options -%}
+                                                      <option value="{{opt}}" />
+                                                      {% endfor %}
+                                                    </datalist>
+                                                    {% endif %}
     
                                                     <div class="ca87a9115 input-label js-required cb7527a39 c6834213f"
                                                         data-dynamic-label-for="{{input.metadata_key}}" aria-hidden="true">
@@ -154,6 +182,25 @@
 
                                                     <input class="input ce3d41e26 c5f1130a2" inputmode="{{input.mode}}"
                                                         name="{{input.metadata_key}}" id="{{input.metadata_key}}" type="date" value="{{input.current}}" {% if input.required %}required=""{% endif %}
+                                                        autocomplete="{{input.metadata_key}}" autocapitalize="none" spellcheck="false"
+                                                        autofocus="">
+    
+                                                    <div class="ca87a9115 input-label js-required cb7527a39 c6834213f"
+                                                        data-dynamic-label-for="{{input.metadata_key}}" aria-hidden="true">
+                                                        {{input.label}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% elif input.type == "color" %}
+                                            <div class="input-wrapper _input-wrapper">
+                                                <div class="cf18f326b c9703a851 color c24850783 c07c7c52c"
+                                                    data-action-text="" data-alternate-action-text="">
+                                                    <label class="ca87a9115 input-label no-js cb7527a39 c6834213f" for="{{input.metadata_key}}">
+                                                        {{input.label}}
+                                                    </label>
+
+                                                    <input class="input ce3d41e26 c5f1130a2" inputmode="{{input.mode}}"
+                                                        name="{{input.metadata_key}}" id="{{input.metadata_key}}" type="color" value="{{input.current}}" {% if input.required %}required=""{% endif %}
                                                         autocomplete="{{input.metadata_key}}" autocapitalize="none" spellcheck="false"
                                                         autofocus="">
     
@@ -226,7 +273,7 @@
                                                     
                                                     <select value="None" name="select_test" class="input" style="background: url('data:image/svg+xml;utf-8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;24&quot; height=&quot;24&quot;><path d=&quot;M7 10l5 5 5-5z&quot;/><path d=&quot;M0 0h24v24H0z&quot; fill=&quot;none&quot;/></svg>') calc(100% - 8px) 50% no-repeat transparent;">
                                                         {% for opt in input.options -%}
-                                                        <option value="opt">{{opt}}</option>
+                                                        <option value="{{opt}}">{{opt}}</option>
                                                         {% endfor %}
                                                     </select>
                                                     <div class="ca87a9115 input-label js-required cb7527a39 c6834213f" data-dynamic-label-for="{{input.metadata_key}}" aria-hidden="true">{{input.label}}</div>

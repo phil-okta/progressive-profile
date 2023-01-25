@@ -23,7 +23,7 @@ from bs4 import BeautifulSoup
 import re
 
 from dotenv import load_dotenv, find_dotenv
-from flask import Flask, request, jsonify, _request_ctx_stack, Response, render_template, session, redirect, url_for
+from flask import Flask, request, jsonify, _request_ctx_stack, Response, render_template, make_response, session, redirect, url_for
 from flask_session import Session
 from flask_cors import cross_origin
 from jose import jwt
@@ -234,39 +234,60 @@ def progressive_universal():
     valid_session_token = validate_session_token_from_request(session_token)
     # contents = session_token.get("contents", False)
     data = valid_session_token.get("data")
-    event = data["event"]
-    event_request = event["request"]
-    query = event_request["query"]
-    query_string = f'{urlencode(query, doseq=False)}'
-    signin_url = f'https://{event_request["hostname"]}/authorize?{query_string}'
-    print(f"getting ul_html: {signin_url}")
-    ul_response = requests.get(signin_url)
-    ul_html = BeautifulSoup(ul_response.text, 'html.parser')
-    ul_image_element = ul_html.find('img', attrs={"id":"prompt-logo-center"})
-    ul_style_element = ul_html.find('style', attrs={"id":"custom-styles-container"})
-    ul_style_element_text = ul_style_element.text
-    btn_background_re = re.search( r'\.ce4c446b5[\s]*\{[\s]*background-color:[\s]*#([0-9A-Fa-f]{6})', ul_style_element_text, re.M)
-    btn_background_rgb = "0, 0, 0"
-    if btn_background_re is not None:
-      btn_background_rgb = str(tuple(int(btn_background_re.group(1)[i:i+2], 16) for i in (0, 2, 4)))[1:-1]
-    else:
-      primary_color_re = re.search( r'{.*\s*.*--primary-color:\s*#([0-9A-Fa-f]{6})', ul_style_element_text, re.M)
-      if primary_color_re is not None:
-        btn_background_rgb = str(tuple(int(primary_color_re.group(1)[i:i+2], 16) for i in (0, 2, 4)))[1:-1]
-      
-    print(f"Parsed RGB: {btn_background_rgb}")
-    return render_template(f'new_ul.html',
+        
+    # Prep theme data for template
+    theme = {
+      "custom_styles": "body {background: #F0F1F3;font-family: ulp-font, -apple-system, BlinkMacSystemFont, Roboto, Helvetica, sans-serif;}.c0a1c2a4c {background: #F0F1F3;}.c92bc914b.c39229d5e {background: #D00E17;}.c92bc914b.c619b43f9 {background: #0A8852;}.c255fbfa4 {background-color: #635DFF;color: #ffffff;}.c255fbfa4 a, .c255fbfa4 a:visited {color: #ffffff;}.c2d4223d4 {background-color: #0A8852;}.caf53d459 {background-color: #D00E17;}.input.c5c917aaa {border-color: #D00E17;}.error-cloud {background-color: #D00E17;}.error-fatal {background-color: #D00E17;}.error-local {background-color: #D00E17;}#alert-trigger {background-color: #D00E17;}",
+      "css_variables": {}, # dictionary of css variable overrides
+      "logo_element": f'<img class="ca89adc79 c69cd914d" id="prompt-logo-center" src="https://cdn.auth0.com/blog/auth0rta/theme/logos/auth0-logo-black.png" alt="{data["title"]}">',
+      "auto_generate": True
+    }
+    if data.get("theme") is not None:
+      theme.update(data["theme"]) # overwrite defaults values
+    if theme["auto_generate"]:
+      event = data["event"]
+      event_request = event["request"]
+      query = event_request["query"]
+      query_string = f'{urlencode(query, doseq=False)}'
+      signin_url = f'https://{event_request["hostname"]}/authorize?{query_string}'
+      print(f"getting ul_html: {signin_url}")
+      ul_response = requests.get(signin_url)
+      ul_html = BeautifulSoup(ul_response.text, 'html.parser')
+      ul_image_element = ul_html.find('img', attrs={"id":"prompt-logo-center"})
+      ul_style_element = ul_html.find('style', attrs={"id":"custom-styles-container"})
+      ul_style_element_text = ul_style_element.text
+      theme["custom_styles"] = ul_style_element_text
+      btn_background_re = re.search( r'\.ce4c446b5[\s]*\{[\s]*background-color:[\s]*#([0-9A-Fa-f]{6})', ul_style_element_text, re.M)
+      primary_color_rgb = "0, 0, 0"
+      if btn_background_re is not None:
+        primary_color_rgb = str(tuple(int(btn_background_re.group(1)[i:i+2], 16) for i in (0, 2, 4)))[1:-1]
+      else:
+        primary_color_re = re.search( r'{.*\s*.*--primary-color:\s*#([0-9A-Fa-f]{6})', ul_style_element_text, re.M)
+        if primary_color_re is not None:
+          primary_color_rgb = str(tuple(int(primary_color_re.group(1)[i:i+2], 16) for i in (0, 2, 4)))[1:-1]  
+        print(f"Parsed Primmary RGB: {primary_color_rgb}")
+      if data.get("theme") is None or data["theme"].get("logo_element") is None:
+        theme["logo_element"] = ul_image_element
+      if data.get("theme") is None or data["theme"].get("page_background_color") is None:
+        theme["css_variables"]["page_background_color"] = "#ffffff"
+      if data.get("theme") is None or data["theme"].get("primary_color_rgb") is None:
+        theme["css_variables"]["primary_color_rgb"] = primary_color_rgb
+      if data.get("theme") is None or data["theme"].get("primary_color") is None:
+        theme["css_variables"]["primary_color"] = "rgb(var(--primary-color-rgb))"
+      if data.get("theme") is None or data["theme"].get("primary_color_no_override") is None:
+        theme["css_variables"]["primary_color_no_override"] = "rgb(var(--primary-color-rgb))"
+        
+    response = make_response(render_template(f'new_ul.html',
                              title=f'{data["title"]}',
                              heading=f'{data["heading"]}',
                              lead=f'{data["lead"]}',
                              inputs=data["inputs"],
                              button_text=f'{data["button_text"]}',
-                             custom_styles=ul_style_element_text,
-                             primary_color_rgb = btn_background_rgb,
-                             # logo_src=ul_image_element["src"],
-                             logo_element=ul_image_element,
+                             theme=theme,
                              state=state,
-                             action_route="/prog/general/complete")
+                             action_route="/prog/general/complete"))
+    response.headers['referrer-policy'] = 'same-origin'
+    return response
   else:
     return render_template("new_ul.html",
                              title="No Active Auth Session Detected",
